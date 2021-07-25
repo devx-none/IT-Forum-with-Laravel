@@ -16,13 +16,13 @@ class CommentController extends Controller
      */
     public function index($id)
     {
-        // $answers = Comment::selectRaw('*, datediff(created_at, now()) as day')->orderBy('created_at', 'desc')->get();
-          $answers = Comment::join('questions', 'questions.id', '=', 'comments.Question_id')
-          ->join('users', 'users.id','=', 'comments.User_id')
-          ->where('questions.id',$id)
-          ->select('questions.*,comments.*,users.*')
-           ->get();
-        return view('answer.index', ['answers' => $answers]);
+
+        // $answers = Comment::selectRaw('*')
+        // //   $answers = Comment::join('questions', 'comments . Question_id','=','questions.id',)
+        // //   ->join('users', 'comments.user_id', '=', 'users.User_id')
+        //   ->where('Question_id',$id)
+        //    ->get();
+        // return view('', ['answers' => $answers]);
 
     }
 
@@ -44,7 +44,7 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+
         request()->validate([
             'comment' => 'required',
             'Question_id' => 'required',
@@ -54,8 +54,10 @@ class CommentController extends Controller
             'comment' => $request->comment,
             'Question_id' => $request->Question_id,
             'user_id' => Auth::user()->id,
+
         ]);
-        return redirect()->route('questions')
+
+        return redirect()->back()
         ->with('success', 'Question created successfully');
     }
 
@@ -99,8 +101,12 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Comment $comment)
+    public function destroy($id)
     {
-        //
+        $comment = Comment::findOrFail($id);
+        $comment->delete();
+        return redirect()->back()
+        ->with('success', 'Question deleted successfully');
     }
+   
 }

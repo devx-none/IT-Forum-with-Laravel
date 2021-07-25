@@ -21,10 +21,12 @@ module.exports = {
         },
         colors: {
 
+            teal: colors.teal,
+            gray: colors.gray,
       }
 
 
-            
+
     },
 
     variants: {

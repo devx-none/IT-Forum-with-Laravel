@@ -1,26 +1,39 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-light border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-jet-application-mark class="block h-9 w-auto" />
+                    <a href="{{ route('index') }}">
+                        <img src="https://img.icons8.com/color/48/000000/forumbee--v1.png" />
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
+
+                @auth
+                @if(Auth::user()->role=='admin')
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+
                     <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                        {{ __('Home') }}
+                        {{ __('users') }}
                     </x-jet-nav-link>
+
+
                 </div>
+                @else
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-jet-nav-link href="{{ route('create') }}">
-                        {{ __('Questions') }}
+                    <x-jet-nav-link href="{{ route('MyQuestions') }}">
+                        {{ __(' My Questions') }}
+                    </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('MyAnswers') }}">
+                        {{ __(' My Answers') }}
                     </x-jet-nav-link>
                 </div>
+                @endif
+                @endauth
+
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ml-6">
@@ -104,16 +117,20 @@
                             <x-jet-dropdown-link href="{{ route('profile.show') }}">
                                 {{ __('Profile') }}
                             </x-jet-dropdown-link>
+                            @if (Route::has('login'))
+                            @auth
                             @if(Auth::user()->role=='normal')
-                            <x-jet-dropdown-link href="{{ route('profile.show') }}">
+                            <x-jet-dropdown-link href="{{ route('MyQuestions') }}">
                                 {{ __('My Questions') }}
                             </x-jet-dropdown-link>
                             @endif
 
                             @if(Auth::user()->role=='admin')
-                            <x-jet-dropdown-link href="{{ route('profile.show') }}">
+                            <x-jet-dropdown-link href="{{ route('dashboard') }}">
                                 {{ __('Dashboard') }}
                             </x-jet-dropdown-link>
+                            @endif
+                            @endauth
                             @endif
 
 

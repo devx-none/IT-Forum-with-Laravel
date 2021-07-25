@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Question;
+use Carbon\Carbon;
+
 
 class QuestionController extends Controller
 {
@@ -69,8 +71,13 @@ class QuestionController extends Controller
     public function show($id)
     {
         $questions = Question::selectRaw('*, datediff(created_at, now()) as day')
-        ->where('id', $id)->get();
-        return view('questions.answer', ['questions' => $questions]);
+        ->where('id', $id)->first();
+        $answers = Question::join('comments', 'questions.id', '=', 'comments.Question_id')
+        ->join('users', 'comments.user_id', '=', 'users.id')
+        ->where('questions.id', $id)
+        ->selectRaw('*,comments.id as comment_id,comments.created_at as day')
+        ->get();
+        return view('questions.answer', ['questions' => $questions,'answers'=>$answers ]);
 
 
     }

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
+            {{ __('My Answers') }}
         </h2>
     </x-slot>
 
@@ -17,23 +17,23 @@
                                     <thead class="bg-gray-50">
                                         <tr>
                                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Users
+                                                Answers
+                                            </th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Created at
                                             </th>
                                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                 Questions
                                             </th>
+
                                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Status
+                                                Actions
                                             </th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Role
-                                            </th>
-                                            <th scope="col" class="relative px-6 py-3">
-                                                <span class="sr-only">Edit</span>
-                                            </th>
+
                                         </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200">
+                                        @foreach($answers as $answer)
                                         <tr>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="flex items-center">
@@ -42,32 +42,38 @@
                                                     </div>
                                                     <div class="ml-4">
                                                         <div class="text-sm font-medium text-gray-900">
-                                                            Jane Cooper
+                                                            {!!$answer->comment!!}
                                                         </div>
                                                         <div class="text-sm text-gray-500">
-                                                            jane.cooper@example.com
+
+
                                                         </div>
                                                     </div>
                                                 </div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="text-sm text-gray-900">Regional Paradigm Technician</div>
-                                                <div class="text-sm text-gray-500">Optimization</div>
+                                                <div class="text-sm text-gray-900"> {{$answer->created_date}}</div>
+                                                <!-- <div class="text-sm text-gray-500">Optimization</div> -->
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                                    Active
+                                                    <a href="/questions/answer/{{$answer->Question_id}}">
+                                                        {{$answer->title}}
+                                                    </a>
                                                 </span>
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                Normal
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <button class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-                                                    Delete
-                                                </button>
-                                                 </td>
+
+                                            <form method="post" action="/answer/{{$answer->comment_id}}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                    <button type="submit" class="bg-danger text-white px-6 py-2 rounded-full flex">
+                                                        Delete
+                                                    </button>
+                                                </td>
+                                            </form>
                                         </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
